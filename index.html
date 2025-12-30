@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COZY FOCUS | Sanctuary</title>
+    <link rel="icon" href="https://i.pinimg.com/1200x/f9/72/50/f972503d193b177d10dd8e375397364c.jpg" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cozy: {
+                dark: '#1c1917', /* Warm Stone 900 */
+                card: 'rgba(41, 37, 36, 0.7)', /* Stone 800 */
+                paper: '#fafaf9', /* Stone 50 */
+                text: '#e7e5e4', /* Stone 200 */
+                muted: '#a8a29e', /* Stone 400 */
+                
+                // Accents
+                amber: '#fbbf24', // Warm light
+                clay: '#ca8a04',  // Deep gold
+                sage: '#a7f3d0',  // Soft Green
+                rose: '#fda4af',  // Soft Red
+                sand: '#f5f5f4',
+              }
+            },
+            fontFamily: {
+              sans: ['Nunito', 'sans-serif'],
+              serif: ['Lora', 'serif'],
+              display: ['Lora', 'serif'],
+            },
+            animation: {
+              'breathe': 'breathe 6s ease-in-out infinite',
+              'float': 'float 8s ease-in-out infinite',
+              'fade-in': 'fadeIn 1s ease-out forwards',
+            },
+            keyframes: {
+              breathe: {
+                '0%, 100%': { transform: 'scale(1)', opacity: 0.9 },
+                '50%': { transform: 'scale(1.02)', opacity: 1 },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              },
+              fadeIn: {
+                '0%': { opacity: 0, transform: 'translateY(10px)' },
+                '100%': { opacity: 1, transform: 'translateY(0)' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        background-color: #1c1917;
+        color: #e7e5e4;
+        overflow-x: hidden;
+      }
+      
+      /* Organic Paper Texture */
+      .texture-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.03;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        filter: contrast(150%) brightness(100%);
+      }
+
+      /* Soft Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(231, 229, 228, 0.2); 
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(231, 229, 228, 0.4); 
+      }
+      
+      ::selection {
+        background: rgba(251, 191, 36, 0.3); /* Amber selection */
+        color: white;
+      }
+
+      /* Utility for soft panels */
+      .cozy-panel {
+        background: rgba(28, 25, 23, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-router-dom": "https://esm.sh/react-router-dom@6.28.0?deps=react@18.3.1,react-dom@18.3.1",
+    "framer-motion": "https://esm.sh/framer-motion@11.15.0?deps=react@18.3.1,react-dom@18.3.1",
+    "recharts": "https://esm.sh/recharts@2.15.0?deps=react@18.3.1,react-dom@18.3.1",
+    "lucide-react": "https://esm.sh/lucide-react@0.469.0?deps=react@18.3.1",
+    "tailwind-merge": "https://esm.sh/tailwind-merge@2.6.0",
+    "zustand": "https://esm.sh/zustand@5.0.3?deps=react@18.3.1",
+    "clsx": "https://esm.sh/clsx@2.1.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <div class="texture-overlay"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
