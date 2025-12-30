@@ -239,10 +239,14 @@ export const Layout: React.FC = () => {
                     }`
                   }
                 >
-                  <item.icon size={20} className="mb-1" strokeWidth={2} />
-                  <span className="text-[10px] font-medium tracking-wide">{item.label}</span>
-                  {/* Active Indicator Dot */}
-                  <span className={`w-1 h-1 rounded-full mt-1 transition-all ${({isActive}:any) => isActive ? 'bg-cozy-amber shadow-[0_0_5px_rgba(251,191,36,0.5)]' : 'bg-transparent'}`} />
+                  {({ isActive }) => (
+                    <>
+                      <item.icon size={20} className="mb-1" strokeWidth={2} />
+                      <span className="text-[10px] font-medium tracking-wide">{item.label}</span>
+                      {/* Active Indicator Dot */}
+                      <span className={`w-1 h-1 rounded-full mt-1 transition-all ${isActive ? 'bg-cozy-amber shadow-[0_0_5px_rgba(251,191,36,0.5)]' : 'bg-transparent'}`} />
+                    </>
+                  )}
                 </NavLink>
               ))}
             </div>

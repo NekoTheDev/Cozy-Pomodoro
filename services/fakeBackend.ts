@@ -24,6 +24,20 @@ const simulateNetwork = async () => {
   randomFail();
 };
 
+// Helper for safe JSON parsing
+const safeParse = <T>(key: string, fallback: T): T => {
+  try {
+    const item = localStorage.getItem(key);
+    // If item is null, undefined, or empty string, return fallback
+    if (!item || item === "undefined") return fallback;
+    return JSON.parse(item);
+  } catch (e) {
+    console.warn(`Data corruption detected for key "${key}". Resetting to fallback.`);
+    localStorage.removeItem(key);
+    return fallback;
+  }
+};
+
 // --- AUTH MOCKS ---
 
 const MOCK_USER: User = {
@@ -43,8 +57,7 @@ export const apiLogin = async (email: string, password: string): Promise<AuthRes
   localStorage.setItem('auth_token', token);
   
   // Return stored user if exists, else mock
-  const storedUser = localStorage.getItem('user');
-  const user = storedUser ? JSON.parse(storedUser) : MOCK_USER;
+  const user = safeParse<User>('user', MOCK_USER);
   
   localStorage.setItem('user', JSON.stringify(user));
   return { user, token };
@@ -62,16 +75,19 @@ export const apiRegister = async (email: string, name: string): Promise<AuthResp
 export const apiLogout = async (): Promise<void> => {
   await simulateNetwork();
   localStorage.removeItem('auth_token');
-  // We keep the user in local storage to simulate "server" persistence, 
-  // but in a real app logout clears session. 
-  // For this mock, we act like the session is gone.
 };
 
 export const apiMe = async (): Promise<User> => {
   await simulateNetwork();
   const stored = localStorage.getItem('user');
   if (!stored) throw new Error("Unauthorized");
-  return JSON.parse(stored);
+  
+  try {
+    return JSON.parse(stored);
+  } catch (e) {
+    localStorage.removeItem('user');
+    throw new Error("Unauthorized - Session Invalid");
+  }
 };
 
 export const apiUpdateUser = async (updates: Partial<User>): Promise<User> => {
@@ -79,18 +95,20 @@ export const apiUpdateUser = async (updates: Partial<User>): Promise<User> => {
   const stored = localStorage.getItem('user');
   if (!stored) throw new Error("Unauthorized");
   
-  const currentUser = JSON.parse(stored);
-  const updatedUser = { ...currentUser, ...updates };
-  
-  localStorage.setItem('user', JSON.stringify(updatedUser));
-  return updatedUser;
+  try {
+    const currentUser = JSON.parse(stored);
+    const updatedUser = { ...currentUser, ...updates };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    return updatedUser;
+  } catch {
+    throw new Error("Failed to update user");
+  }
 };
 
 // --- TASK MOCKS ---
 
 const getStoredTasks = (): Task[] => {
-  const tasks = localStorage.getItem('tasks');
-  return tasks ? JSON.parse(tasks) : [];
+  return safeParse<Task[]>('tasks', []);
 };
 
 const saveTasks = (tasks: Task[]) => {
@@ -101,9 +119,9 @@ export const apiGetTasks = async (): Promise<Task[]> => {
   await simulateNetwork();
   // Seed initial data if empty
   let tasks = getStoredTasks();
-  // We check for length <= 3 to re-seed if it only has the initial small set, 
-  // ensuring the user sees the new plans without needing a hard reset.
-  if (tasks.length <= 3) {
+  
+  // We check for length <= 0 (or some small number) to re-seed if empty
+  if (tasks.length === 0) {
     tasks = [
       { id: '1', title: 'Hack the Gibson', status: 'IN_PROGRESS', priority: 'HIGH', estimatedPomodoros: 4, completedPomodoros: 2, createdAt: new Date().toISOString() },
       { id: '2', title: 'Update ICE countermeasures', status: 'TODO', priority: 'MEDIUM', estimatedPomodoros: 2, completedPomodoros: 0, createdAt: new Date().toISOString() },
@@ -111,8 +129,6 @@ export const apiGetTasks = async (): Promise<Task[]> => {
       { id: '4', title: 'Review system architecture', status: 'TODO', priority: 'HIGH', estimatedPomodoros: 3, completedPomodoros: 0, createdAt: new Date(Date.now() - 100000).toISOString() },
       { id: '5', title: 'Optimize database queries', status: 'TODO', priority: 'MEDIUM', estimatedPomodoros: 2, completedPomodoros: 0, createdAt: new Date(Date.now() - 200000).toISOString() },
       { id: '6', title: 'Backup encrypted drives', status: 'TODO', priority: 'LOW', estimatedPomodoros: 1, completedPomodoros: 0, createdAt: new Date(Date.now() - 300000).toISOString() },
-      { id: '7', title: 'Synthesize new firewall rules', status: 'TODO', priority: 'HIGH', estimatedPomodoros: 4, completedPomodoros: 1, createdAt: new Date(Date.now() - 400000).toISOString() },
-      { id: '8', title: 'Coffee break', status: 'TODO', priority: 'LOW', estimatedPomodoros: 1, completedPomodoros: 0, createdAt: new Date(Date.now() - 500000).toISOString() },
     ];
     saveTasks(tasks);
   }
@@ -155,18 +171,13 @@ export const apiDeleteTask = async (id: string): Promise<void> => {
 
 export const apiGetStats = async (daysArg: number = 7): Promise<DailyStat[]> => {
   await simulateNetwork();
-  // Generate fake last n days
   const today = new Date();
   const stats: DailyStat[] = [];
-  // Ensure we have at least some variation based on the "random" execution context
-  const variance = Math.random(); 
   
   for (let i = daysArg - 1; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
     
-    // Create somewhat consistent fake data based on the date so it doesn't jump wildly on every refresh unless we want it to
-    // For this mock, random is fine to show "live" updates
     stats.push({
       date: d.toISOString().split('T')[0],
       focusMinutes: Math.floor(Math.random() * 200) + 20,

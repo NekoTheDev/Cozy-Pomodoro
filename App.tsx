@@ -39,7 +39,8 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Login />} />
         
-        <Route path="/" element={
+        {/* Protected App Routes - Pathless Layout Wrapper */}
+        <Route element={
           <ProtectedRoute>
             <Layout />
           </ProtectedRoute>

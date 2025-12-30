@@ -64,9 +64,10 @@ export const ThemePicker: React.FC<ThemePickerProps> = ({ onClose }) => {
           {/* Custom Upload Section */}
           <div className="mb-8">
             <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Local Device Source</h3>
-            <div 
+            <button 
+              type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-gray-700 rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer hover:border-neon-cyan hover:bg-neon-cyan/5 transition-all group"
+              className="w-full border-2 border-dashed border-gray-700 rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer hover:border-neon-cyan hover:bg-neon-cyan/5 transition-all group"
             >
               <input 
                 type="file" 
@@ -78,7 +79,7 @@ export const ThemePicker: React.FC<ThemePickerProps> = ({ onClose }) => {
               <Upload className="text-gray-500 group-hover:text-neon-cyan mb-3 transition-colors" size={32} />
               <span className="text-gray-400 group-hover:text-white font-display text-sm">CLICK TO UPLOAD IMAGE</span>
               <span className="text-xs text-gray-600 mt-1 font-mono">MAX SIZE: 2MB // FORMAT: JPG, PNG</span>
-            </div>
+            </button>
           </div>
 
           {/* Presets Grid */}
