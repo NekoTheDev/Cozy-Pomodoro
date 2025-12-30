@@ -106,36 +106,36 @@ const CalendarPage: React.FC = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="max-w-6xl mx-auto pt-4 md:pt-8 h-full flex flex-col md:flex-row gap-8 pb-20 md:pb-0"
+      className="max-w-6xl mx-auto pt-2 md:pt-8 h-full flex flex-col lg:flex-row gap-6 lg:gap-8 pb-24 md:pb-0"
     >
       {/* LEFT: CALENDAR GRID */}
       <div className="flex-1">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-display font-bold text-white tracking-tighter">
+        <div className="flex items-center justify-between mb-6 md:mb-8">
+          <h2 className="text-2xl md:text-3xl font-display font-bold text-white tracking-tighter">
             TEMPORAL <span className="text-neon-yellow">GRID</span>
           </h2>
           <div className="flex gap-2">
             <CyberButton size="sm" variant="ghost" onClick={handlePrev}><ChevronLeft size={20} /></CyberButton>
-            <CyberButton size="sm" onClick={handleToday}>TODAY</CyberButton>
+            <CyberButton size="sm" onClick={handleToday} className="hidden md:flex">TODAY</CyberButton>
             <CyberButton size="sm" variant="ghost" onClick={handleNext}><ChevronRight size={20} /></CyberButton>
           </div>
         </div>
 
-        <CyberCard className="border-l-neon-yellow/50">
-          <div className="flex items-center gap-3 mb-6">
+        <CyberCard className="border-l-neon-yellow/50 p-3 md:p-6">
+          <div className="flex items-center gap-3 mb-4 md:mb-6">
              <CalendarIcon className="text-neon-yellow" size={24} />
-             <span className="text-2xl font-display font-bold text-white uppercase">
+             <span className="text-lg md:text-2xl font-display font-bold text-white uppercase">
                {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
              </span>
           </div>
 
-          <div className="grid grid-cols-7 gap-2 md:gap-4 mb-2">
-            {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(d => (
-              <div key={d} className="text-center text-xs font-bold text-gray-500 uppercase tracking-widest">{d}</div>
+          <div className="grid grid-cols-7 gap-1 md:gap-4 mb-2">
+            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => (
+              <div key={d} className="text-center text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">{d}</div>
             ))}
           </div>
 
-          <div className="grid grid-cols-7 gap-2 md:gap-4">
+          <div className="grid grid-cols-7 gap-1 md:gap-4">
             {days.map((day, idx) => {
                const isRange = day && isInRange(day);
                return (
@@ -144,7 +144,7 @@ const CalendarPage: React.FC = () => {
                     disabled={!day}
                     onClick={() => day && handleDateClick(day)}
                     className={`
-                    aspect-square border rounded-xl p-2 flex flex-col items-center justify-center relative transition-all duration-300 group
+                    aspect-square border rounded-md md:rounded-xl p-0.5 md:p-2 flex flex-col items-center justify-center relative transition-all duration-300 group
                     ${!day ? 'border-transparent cursor-default' : 'cursor-pointer'}
                     ${day && isSelected(day) ? 'border-neon-yellow bg-neon-yellow/10 shadow-[0_0_15px_rgba(252,238,10,0.2)] scale-105 z-20' : ''}
                     ${isRange && !isSelected(day!) ? 'bg-neon-yellow/5 border-neon-yellow/30 relative overflow-hidden' : ''}
@@ -157,11 +157,11 @@ const CalendarPage: React.FC = () => {
                     )}
                     {day && (
                     <>
-                        <span className={`text-sm md:text-base font-bold font-display z-10 ${isSelected(day) ? 'text-neon-yellow' : isToday(day) ? 'text-neon-cyan' : isRange ? 'text-neon-yellow/70' : 'text-gray-400 group-hover:text-gray-200'}`}>
+                        <span className={`text-xs md:text-base font-bold font-display z-10 ${isSelected(day) ? 'text-neon-yellow' : isToday(day) ? 'text-neon-cyan' : isRange ? 'text-neon-yellow/70' : 'text-gray-400 group-hover:text-gray-200'}`}>
                         {day}
                         </span>
                         {hasPlans(day) && (
-                        <div className="absolute bottom-2 w-1.5 h-1.5 bg-neon-magenta rounded-full shadow-[0_0_5px_rgba(255,0,255,0.8)] z-10" />
+                        <div className="absolute bottom-1 md:bottom-2 w-1 h-1 md:w-1.5 md:h-1.5 bg-neon-magenta rounded-full shadow-[0_0_5px_rgba(255,0,255,0.8)] z-10" />
                         )}
                     </>
                     )}
@@ -173,8 +173,8 @@ const CalendarPage: React.FC = () => {
       </div>
 
       {/* RIGHT: PLANNER */}
-      <div className="w-full md:w-[350px] lg:w-[400px]">
-        <div className="flex items-center justify-between mb-8 h-[44px]"> {/* Height matching header */}
+      <div className="w-full lg:w-[400px]">
+        <div className="flex items-center justify-between mb-4 md:mb-8 h-[44px]"> {/* Height matching header */}
           <div className="flex items-center gap-2 text-gray-400">
              <ListTodo size={20} />
              <span className="font-bold text-sm tracking-wider uppercase">Objectives</span>
@@ -184,7 +184,7 @@ const CalendarPage: React.FC = () => {
           </div>
         </div>
 
-        <CyberCard className="h-[500px] flex flex-col relative overflow-hidden border-t-neon-magenta/50">
+        <CyberCard className="h-[400px] md:h-[500px] flex flex-col relative overflow-hidden border-t-neon-magenta/50">
           
           {/* Add Input Form */}
           <form onSubmit={handleAddPlan} className="mb-6 flex flex-col gap-3">
@@ -204,14 +204,14 @@ const CalendarPage: React.FC = () => {
             </div>
             
             {/* Range Controls */}
-            <div className="flex items-center justify-between px-1">
+            <div className="flex flex-wrap items-center justify-between px-1 gap-2">
                 <button 
                   type="button" 
                   onClick={() => setIsMultiDay(!isMultiDay)}
                   className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider transition-colors ${isMultiDay ? 'text-neon-yellow' : 'text-gray-500 hover:text-gray-300'}`}
                 >
                     <CalendarRange size={14} />
-                    {isMultiDay ? 'Multi-Day Active' : 'Single Day'}
+                    {isMultiDay ? 'Multi-Day' : 'Single Day'}
                 </button>
 
                 <AnimatePresence>
@@ -229,7 +229,7 @@ const CalendarPage: React.FC = () => {
                               min={formatDateKey(selectedDate)}
                               value={formatDateKey(rangeEndDate)}
                               onChange={(e) => setRangeEndDate(new Date(e.target.value))}
-                              className="bg-black/40 border border-white/10 rounded-md px-2 py-1 text-xs text-white focus:outline-none focus:border-neon-yellow"
+                              className="bg-black/40 border border-white/10 rounded-md px-2 py-1 text-xs text-white focus:outline-none focus:border-neon-yellow max-w-[120px]"
                             />
                         </motion.div>
                     )}
@@ -267,7 +267,7 @@ const CalendarPage: React.FC = () => {
 
                     <button 
                       onClick={() => deletePlan(plan.id)}
-                      className="opacity-0 group-hover:opacity-100 p-2 text-gray-500 hover:text-red-400 transition-all"
+                      className="opacity-100 md:opacity-0 group-hover:opacity-100 p-2 text-gray-500 hover:text-red-400 transition-all"
                     >
                       <Trash2 size={16} />
                     </button>

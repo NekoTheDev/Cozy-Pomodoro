@@ -65,7 +65,7 @@ const Settings: React.FC = () => {
     <motion.div 
       initial={{ opacity: 0 }} 
       animate={{ opacity: 1 }} 
-      className="max-w-4xl mx-auto pt-4 md:pt-8 pb-20"
+      className="max-w-4xl mx-auto pt-4 md:pt-8 pb-24 md:pb-20 px-0 md:px-0"
     >
       <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-6 md:mb-8">SYSTEM CONFIG</h2>
       
@@ -142,7 +142,7 @@ const Settings: React.FC = () => {
                 )}
               </div>
               <div className="pt-2 flex justify-end">
-                <CyberButton variant="secondary" onClick={handleSaveProfile} className="flex items-center gap-2 w-full md:w-auto">
+                <CyberButton variant="secondary" onClick={handleSaveProfile} className="flex items-center gap-2 w-full md:w-auto justify-center">
                   <Save size={16} />
                   UPDATE IDENTITY
                 </CyberButton>
@@ -158,7 +158,7 @@ const Settings: React.FC = () => {
             <h3 className="text-lg md:text-xl font-display text-white">TIMER CALIBRATION</h3>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <div>
               <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">Focus (min)</label>
               <CyberInput 
@@ -185,8 +185,8 @@ const Settings: React.FC = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-             <label className="flex items-center gap-3 p-3 rounded border border-white/10 hover:border-neon-cyan/50 cursor-pointer bg-black/20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mt-6">
+             <label className="flex items-center gap-3 p-3 rounded border border-white/10 hover:border-neon-cyan/50 cursor-pointer bg-black/20 transition-colors">
                <input 
                  type="checkbox" 
                  checked={config.autoStartBreaks}
@@ -195,7 +195,7 @@ const Settings: React.FC = () => {
                />
                <span className="text-sm font-bold text-gray-300">Auto-start Breaks</span>
              </label>
-             <label className="flex items-center gap-3 p-3 rounded border border-white/10 hover:border-neon-cyan/50 cursor-pointer bg-black/20">
+             <label className="flex items-center gap-3 p-3 rounded border border-white/10 hover:border-neon-cyan/50 cursor-pointer bg-black/20 transition-colors">
                <input 
                  type="checkbox" 
                  checked={config.autoStartPomodoros}
@@ -207,7 +207,7 @@ const Settings: React.FC = () => {
           </div>
 
           <div className="mt-8 flex justify-end">
-            <CyberButton variant="primary" onClick={handleSaveConfig} className="flex items-center gap-2 w-full md:w-auto">
+            <CyberButton variant="primary" onClick={handleSaveConfig} className="flex items-center gap-2 w-full md:w-auto justify-center">
               <Save size={16} />
               SAVE CONFIG
             </CyberButton>
@@ -228,7 +228,7 @@ const Settings: React.FC = () => {
               if(window.confirm('WARNING: Confirm system wipe? This cannot be undone.')) {
                 factoryReset();
               }
-            }} className="w-full md:w-auto">
+            }} className="w-full md:w-auto justify-center">
               FACTORY RESET
             </CyberButton>
           </div>

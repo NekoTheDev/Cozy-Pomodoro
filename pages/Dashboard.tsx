@@ -116,7 +116,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Timer */}
-        <div className="flex-1 flex items-center justify-center overflow-y-auto custom-scrollbar">
+        <div className="flex-1 flex items-center justify-center overflow-y-auto custom-scrollbar min-h-0">
            <Timer />
         </div>
 
@@ -128,7 +128,7 @@ const Dashboard: React.FC = () => {
           className={`p-4 md:p-8 flex justify-center pb-20 md:pb-12 transition-all duration-500 ${isZenMode ? 'translate-y-32 hover:translate-y-0' : 'translate-y-0'}`}
         >
            {/* Responsive Container for dock items */}
-           <div className="bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl px-4 md:px-8 py-3 md:py-4 flex items-center justify-between md:justify-center gap-4 md:gap-8 shadow-xl hover:bg-black/40 transition-colors max-w-full overflow-x-auto no-scrollbar">
+           <div className="bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl px-4 md:px-8 py-3 md:py-4 flex items-center justify-between md:justify-center gap-4 md:gap-8 shadow-xl hover:bg-black/40 transition-colors max-w-[calc(100vw-32px)] overflow-x-auto no-scrollbar">
               <DockItem 
                 icon={ImageIcon} 
                 label="Scenery" 
@@ -168,11 +168,11 @@ const Dashboard: React.FC = () => {
             }}
             exit={{ x: "100%", opacity: 0 }}
             transition={{ type: "spring", stiffness: 200, damping: 25 }}
-            className="absolute right-0 top-0 bottom-0 z-20 shadow-2xl h-full backdrop-blur-md bg-black/80 md:bg-black/20 w-full md:w-[400px]"
+            className="absolute right-0 top-0 bottom-0 z-20 shadow-2xl h-full backdrop-blur-md bg-black/95 md:bg-black/20 w-full md:w-[400px]"
           >
             <div className="w-full h-full flex flex-col border-l border-white/5">
                {/* Mobile Only Close Button inside panel */}
-               <div className="md:hidden p-4 border-b border-white/10 flex justify-end">
+               <div className="md:hidden p-4 border-b border-white/10 flex justify-end bg-black/50 backdrop-blur-lg sticky top-0 z-50">
                   <button onClick={toggleTaskPanel} className="text-gray-400 hover:text-white flex items-center gap-2">
                     <span className="text-xs uppercase font-bold">Close Panel</span>
                     <PanelRightClose size={20} />
@@ -193,7 +193,7 @@ const Dashboard: React.FC = () => {
             right: isTaskPanelOpen ? (window.innerWidth < 768 ? 0 : 420) : 32 // Adjust position based on screen size
           }}
           onClick={toggleTaskPanel}
-          className={`absolute top-8 z-30 p-2.5 bg-black/40 hover:bg-white/10 text-white rounded-lg border border-white/10 backdrop-blur transition-all duration-300 hidden md:block ${isTaskPanelOpen ? 'md:right-[420px]' : 'right-4 md:right-8'}`}
+          className={`absolute top-20 md:top-8 z-30 p-2.5 bg-black/40 hover:bg-white/10 text-white rounded-lg border border-white/10 backdrop-blur transition-all duration-300 hidden md:block ${isTaskPanelOpen ? 'md:right-[420px]' : 'right-4 md:right-8'}`}
         >
           {isTaskPanelOpen ? <PanelRightClose size={20} /> : <PanelRightOpen size={20} />}
         </motion.button>
@@ -223,7 +223,7 @@ const Dashboard: React.FC = () => {
 const DockItem: React.FC<{ icon: any, label: string, active?: boolean, onClick?: () => void }> = ({ icon: Icon, label, active, onClick }) => (
   <button 
     onClick={onClick}
-    className={`flex flex-col items-center gap-2 group relative min-w-[60px] ${active ? 'text-cozy-orange' : 'text-gray-400 hover:text-white'}`}
+    className={`flex flex-col items-center gap-2 group relative min-w-[60px] shrink-0 ${active ? 'text-cozy-orange' : 'text-gray-400 hover:text-white'}`}
   >
     <div className={`p-3 rounded-xl transition-all duration-300 ${active ? 'bg-orange-500/20' : 'bg-white/5 group-hover:bg-white/10 group-hover:-translate-y-1'}`}>
       <Icon size={20} />
