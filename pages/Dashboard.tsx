@@ -116,7 +116,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Timer */}
-        <div className="flex-1 flex items-center justify-center overflow-y-auto custom-scrollbar min-h-0">
+        <div className="flex-1 flex items-center justify-center overflow-y-auto no-scrollbar min-h-0">
            <Timer />
         </div>
 

@@ -28,7 +28,7 @@ export const Layout: React.FC = () => {
   const isDashboard = location.pathname === '/dashboard';
 
   return (
-    <div className="min-h-screen bg-cozy-dark text-cozy-text flex flex-col md:flex-row overflow-hidden font-sans">
+    <div className="h-[100dvh] bg-cozy-dark text-cozy-text flex flex-col md:flex-row overflow-hidden font-sans">
       {/* Desktop Sidebar */}
       <AnimatePresence>
         {!isZenMode && (
@@ -218,7 +218,7 @@ export const Layout: React.FC = () => {
       </AnimatePresence>
 
       {/* Main Content Area */}
-      <main className={`flex-1 relative overflow-hidden flex flex-col ${isDashboard ? 'p-0' : 'p-4 md:p-8 overflow-y-auto'} pb-24 md:pb-0`}>
+      <main className={`flex-1 relative flex flex-col w-full ${isDashboard ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar p-4 md:p-8'} pb-24 md:pb-0`}>
         <Outlet />
       </main>
 

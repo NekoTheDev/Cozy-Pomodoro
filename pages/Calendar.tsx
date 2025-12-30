@@ -184,7 +184,8 @@ const CalendarPage: React.FC = () => {
           </div>
         </div>
 
-        <CyberCard className="h-[400px] md:h-[500px] flex flex-col relative overflow-hidden border-t-neon-magenta/50">
+        {/* Height is auto on mobile to use page scroll, fixed on desktop to use internal scroll */}
+        <CyberCard className="h-auto min-h-[400px] md:h-[500px] flex flex-col relative overflow-hidden border-t-neon-magenta/50">
           
           {/* Add Input Form */}
           <form onSubmit={handleAddPlan} className="mb-6 flex flex-col gap-3">
@@ -237,8 +238,8 @@ const CalendarPage: React.FC = () => {
             </div>
           </form>
 
-          {/* List */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
+          {/* List - Scrollable on desktop, naturally expanding on mobile */}
+          <div className="flex-1 space-y-3 pr-2 md:overflow-y-auto md:custom-scrollbar">
             <AnimatePresence mode="popLayout">
               {selectedPlans.length > 0 ? (
                 selectedPlans.map((plan) => (
