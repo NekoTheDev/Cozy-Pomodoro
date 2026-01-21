@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**🇨🇳 中文文档** | [🇺🇸 English](./README.md)
+**🇨🇳 中文文档** | [🇺🇸 English](./README.md) | [🇻🇳 Tiếng Việt](./README_vi.md)
 
 </div>
 
@@ -132,7 +132,7 @@ UI 遵循 **"暖石与霓虹 (Warm Stone & Neon)"** 配色方案。与刺眼的�
   - *琥珀色 (Amber)* (`#fbbf24`) 用于 专注/主要操作。
   - *青色 (Cyan)* (`#06b6d4`) 用于 科技/数据。
   - *玫瑰色 (Rose)* (`#fda4af`) 用于 警报。
-- **玻璃拟态**: 大量使用 `backdrop-blur` 和半透明边框来创造深度感。
+- **Glassmorphism**: 大量使用 `backdrop-blur` 和半透明边框来创造深度感。
 
 ---
 
