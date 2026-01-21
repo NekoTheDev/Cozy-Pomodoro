@@ -84,35 +84,41 @@ const Dashboard: React.FC = () => {
     try {
       // @ts-ignore - TS doesn't fully support documentPictureInPicture type yet
       const pip = await window.documentPictureInPicture.requestWindow({
-        width: 450,
-        height: 450,
+        width: 400,
+        height: 400,
       });
 
-      // Inject App Styles into PiP Window
-      // We copy all style tags and link tags (Tailwind CDN, Fonts)
-      Array.from(document.head.children).forEach((child) => {
-        if (child.tagName === 'LINK' || child.tagName === 'STYLE') {
-            pip.document.head.appendChild(child.cloneNode(true));
-        }
-        // Specific handling for Tailwind CDN script if present in head
-        if (child.tagName === 'SCRIPT' && (child as HTMLScriptElement).src?.includes('tailwindcss')) {
-             const script = document.createElement('script');
-             script.src = (child as HTMLScriptElement).src;
-             pip.document.head.appendChild(script);
+      // --- CRITICAL: Copy Styles & Scripts for Tailwind/Fonts ---
+      
+      // 1. Copy all CSS Links (Fonts, Tailwind CDN if used as link) and Styles
+      const styles = Array.from(document.head.querySelectorAll('link[rel="stylesheet"], style'));
+      styles.forEach(style => {
+        pip.document.head.appendChild(style.cloneNode(true));
+      });
+
+      // 2. Copy Scripts (Specifically Tailwind Config & Tailwind Library)
+      const scripts = Array.from(document.head.querySelectorAll('script'));
+      scripts.forEach(script => {
+        if (script.src && script.src.includes('tailwindcss')) {
+            const newScript = document.createElement('script');
+            newScript.src = script.src;
+            pip.document.head.appendChild(newScript);
+        } else if (script.textContent && script.textContent.includes('tailwind.config')) {
+            const newScript = document.createElement('script');
+            newScript.textContent = script.textContent;
+            pip.document.head.appendChild(newScript);
         }
       });
       
-      // Add custom styles for the PiP body
+      // 3. Add base body styles
       const style = pip.document.createElement('style');
       style.textContent = `
         body { 
           background-color: #1c1917; 
-          color: #e7e5e4; 
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
           margin: 0;
+          padding: 0;
+          overflow: hidden;
+          font-family: 'Nunito', sans-serif; /* Default Fallback */
         }
       `;
       pip.document.head.appendChild(style);
@@ -297,9 +303,20 @@ const Dashboard: React.FC = () => {
 
       {/* PiP Portal: Renders the Timer into the floating window if active */}
       {pipWindow && createPortal(
-        <div className="h-full w-full flex items-center justify-center p-4 bg-cozy-dark">
-           {/* Scale down the timer slightly for the mini window */}
-           <div className="transform scale-75 origin-center">
+        <div className="h-full w-full flex items-center justify-center relative bg-cozy-dark">
+           {/* Background Image Container */}
+           <div className="absolute inset-0 z-0">
+              <img 
+                src={backgroundImage} 
+                alt="bg" 
+                className="w-full h-full object-cover opacity-60"
+              />
+              <div className="absolute inset-0 bg-cozy-dark/40" />
+              <div className="absolute inset-0 bg-gradient-to-t from-cozy-dark/80 via-transparent to-cozy-dark/50" />
+           </div>
+
+           {/* Content */}
+           <div className="transform scale-75 origin-center relative z-10 w-full h-full flex items-center justify-center">
              <Timer isPassive={true} />
            </div>
         </div>,
