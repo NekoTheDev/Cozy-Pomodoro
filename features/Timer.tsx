@@ -82,7 +82,7 @@ export const Timer: React.FC<TimerProps> = ({ isPassive = false }) => {
   
   // SVG Config
   const size = 380;
-  const strokeWidth = 3;
+  const strokeWidth = 4; // Slightly thicker for better visibility
   const radius = (size - strokeWidth) / 2 - 30;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
@@ -94,10 +94,13 @@ export const Timer: React.FC<TimerProps> = ({ isPassive = false }) => {
       {/* Main Timer Display Container */}
       <div className="relative w-[280px] h-[280px] sm:w-[340px] sm:h-[340px] md:w-[400px] md:h-[400px] flex items-center justify-center mb-6 md:mb-8 transition-all duration-300">
         
-        {/* Soft Glow Behind */}
+        {/* Soft Glow Behind - Radial Gradient for better shape */}
         <div 
-          className="absolute inset-0 rounded-full blur-[60px] md:blur-[80px] opacity-20 transition-colors duration-1000"
-          style={{ backgroundColor: color }} 
+          className="absolute inset-0 rounded-full opacity-30 transition-all duration-1000"
+          style={{ 
+            background: `radial-gradient(circle closest-side, ${color} 0%, transparent 100%)`,
+            filter: 'blur(30px)'
+          }} 
         />
 
         {/* Progress Ring SVG */}
@@ -106,12 +109,13 @@ export const Timer: React.FC<TimerProps> = ({ isPassive = false }) => {
                viewBox={`0 0 ${size} ${size}`} 
                className="w-full h-full overflow-visible"
              >
-                {/* Track */}
+                {/* Track - Matches Theme Color */}
                 <circle
                   cx={size / 2}
                   cy={size / 2}
                   r={radius}
-                  stroke="rgba(255,255,255,0.08)"
+                  stroke={color}
+                  strokeOpacity={0.2}
                   strokeWidth={strokeWidth}
                   fill="transparent"
                 />
