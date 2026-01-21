@@ -4,8 +4,13 @@ import { CyberCard, CyberButton } from '../components/ui/CyberComponents';
 import { apiGetStats } from '../services/fakeBackend';
 import { DailyStat } from '../types';
 import { Download, RefreshCw, Calendar, TrendingUp } from 'lucide-react';
+import { useStore } from '../store/useStore';
+import { translations } from '../utils/i18n';
 
 export const StatsBoard: React.FC = () => {
+  const { language } = useStore();
+  const t = translations[language];
+
   const [data, setData] = useState<DailyStat[]>([]);
   const [loading, setLoading] = useState(true);
   const [range, setRange] = useState<number>(7);
@@ -58,7 +63,7 @@ export const StatsBoard: React.FC = () => {
         // For year view, show Month
         const date = new Date(dateStr);
         // Show month only on 1st or 15th roughly, handled by interval, but text is Month
-        return date.toLocaleDateString('en-US', { month: 'short' });
+        return date.toLocaleDateString(language === 'zh' ? 'zh-CN' : 'en-US', { month: 'short' });
     }
     // Short view
     return dateStr.slice(5); // MM-DD
@@ -71,26 +76,26 @@ export const StatsBoard: React.FC = () => {
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-stone-900/50 p-4 rounded-xl border border-white/5 backdrop-blur-md">
          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4 w-full lg:w-auto">
            <span className="text-stone-400 text-xs font-sans font-bold uppercase tracking-wider flex items-center gap-2">
-             <Calendar size={14} /> Time Range:
+             <Calendar size={14} /> {t.stats_time_range}:
            </span>
            <div className="flex bg-stone-950 rounded-lg p-1 border border-white/5 w-full sm:w-auto justify-between sm:justify-start">
              <button 
                onClick={() => setRange(7)}
                className={`flex-1 sm:flex-none px-4 py-2 sm:py-1.5 text-[10px] font-bold rounded-md transition-all uppercase tracking-wider ${range === 7 ? 'bg-white/10 text-stone-200' : 'text-stone-600 hover:text-stone-300'}`}
              >
-               7 Days
+               {t.stats_days_7}
              </button>
              <button 
                onClick={() => setRange(30)}
                className={`flex-1 sm:flex-none px-4 py-2 sm:py-1.5 text-[10px] font-bold rounded-md transition-all uppercase tracking-wider ${range === 30 ? 'bg-white/10 text-stone-200' : 'text-stone-600 hover:text-stone-300'}`}
              >
-               30 Days
+               {t.stats_days_30}
              </button>
              <button 
                onClick={() => setRange(365)}
                className={`flex-1 sm:flex-none px-4 py-2 sm:py-1.5 text-[10px] font-bold rounded-md transition-all uppercase tracking-wider ${range === 365 ? 'bg-white/10 text-stone-200' : 'text-stone-600 hover:text-stone-300'}`}
              >
-               1 Year
+               {t.stats_year_1}
              </button>
            </div>
          </div>
@@ -101,26 +106,26 @@ export const StatsBoard: React.FC = () => {
            </CyberButton>
            <CyberButton size="sm" variant="secondary" onClick={handleExport} title="Download CSV" className="flex-[3] lg:flex-none justify-center">
              <Download size={16} className="mr-2" />
-             Export CSV
+             {t.stats_export}
            </CyberButton>
          </div>
       </div>
 
       {loading ? (
         <div className="h-[200px] flex items-center justify-center border border-dashed border-white/10 rounded-xl bg-white/5">
-           <div className="text-stone-500 animate-pulse font-sans tracking-widest text-sm uppercase">Gathering Insights...</div>
+           <div className="text-stone-500 animate-pulse font-sans tracking-widest text-sm uppercase">{t.stats_gathering}</div>
         </div>
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <CyberCard className="flex flex-col items-center justify-center py-8 md:py-10 relative overflow-hidden">
-              <span className="text-stone-500 font-sans text-xs uppercase tracking-[0.2em] mb-3 z-10">Total Focus Time</span>
+              <span className="text-stone-500 font-sans text-xs uppercase tracking-[0.2em] mb-3 z-10">{t.stats_total_focus}</span>
               <span className="text-4xl md:text-5xl lg:text-6xl font-serif text-stone-200 text-center z-10">
                 {Math.floor(totalFocus / 60)}<span className="text-2xl text-stone-600 ml-1 font-sans">h</span> {totalFocus % 60}<span className="text-2xl text-stone-600 ml-1 font-sans">m</span>
               </span>
             </CyberCard>
             <CyberCard className="flex flex-col items-center justify-center py-8 md:py-10 relative overflow-hidden">
-              <span className="text-stone-500 font-sans text-xs uppercase tracking-[0.2em] mb-3 z-10">Completed Entries</span>
+              <span className="text-stone-500 font-sans text-xs uppercase tracking-[0.2em] mb-3 z-10">{t.stats_completed_entries}</span>
               <span className="text-4xl md:text-5xl lg:text-6xl font-serif text-cozy-amber z-10">
                 {totalTasks}
               </span>
@@ -131,7 +136,7 @@ export const StatsBoard: React.FC = () => {
             <div className="flex justify-between items-center mb-8">
                <div className="flex items-center gap-3">
                  <TrendingUp className="text-stone-400" />
-                 <h3 className="text-lg md:text-xl font-serif font-medium text-stone-200">Progress History</h3>
+                 <h3 className="text-lg md:text-xl font-serif font-medium text-stone-200">{t.stats_progress_history}</h3>
                </div>
             </div>
             

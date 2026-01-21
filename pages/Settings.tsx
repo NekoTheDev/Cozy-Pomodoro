@@ -3,9 +3,11 @@ import { useStore } from '../store/useStore';
 import { CyberCard, CyberButton, CyberInput } from '../components/ui/CyberComponents';
 import { motion } from 'framer-motion';
 import { Save, RefreshCw, AlertTriangle, User, Upload, Camera } from 'lucide-react';
+import { translations } from '../utils/i18n';
 
 const Settings: React.FC = () => {
-  const { settings, user, updateSettings, updateUserProfile, factoryReset, resetTimer, showToast } = useStore();
+  const { settings, user, updateSettings, updateUserProfile, factoryReset, resetTimer, showToast, language } = useStore();
+  const t = translations[language];
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Local state for forms
@@ -67,7 +69,7 @@ const Settings: React.FC = () => {
       animate={{ opacity: 1 }} 
       className="max-w-4xl mx-auto pt-4 md:pt-8 pb-24 md:pb-20 px-0 md:px-0"
     >
-      <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-6 md:mb-8">SYSTEM CONFIG</h2>
+      <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-6 md:mb-8">{t.settings_title}</h2>
       
       <div className="space-y-6 md:space-y-8">
         
@@ -75,7 +77,7 @@ const Settings: React.FC = () => {
         <CyberCard className="border-l-neon-magenta/50">
           <div className="flex items-center gap-3 mb-6">
             <User className="text-neon-magenta" />
-            <h3 className="text-lg md:text-xl font-display text-white">PROFILE IDENTITY</h3>
+            <h3 className="text-lg md:text-xl font-display text-white">{t.settings_profile}</h3>
           </div>
           
           <div className="flex flex-col md:flex-row gap-8">
@@ -102,7 +104,7 @@ const Settings: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity flex-col gap-1">
                    <Upload className="text-neon-cyan animate-bounce" size={24} />
-                   <span className="text-[10px] text-neon-cyan font-bold uppercase tracking-widest">UPLOAD</span>
+                   <span className="text-[10px] text-neon-cyan font-bold uppercase tracking-widest">{t.settings_upload}</span>
                 </div>
               </button>
               <span className="text-xs text-neon-magenta font-mono">OP_ID: {user?.id?.slice(0,8)}</span>
@@ -111,21 +113,21 @@ const Settings: React.FC = () => {
             {/* Inputs */}
             <div className="flex-1 space-y-4 w-full">
               <div>
-                <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">Codename</label>
+                <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">{t.settings_labels_name}</label>
                 <CyberInput 
                   value={profile.name}
                   onChange={(e) => setProfile({...profile, name: e.target.value})}
                 />
               </div>
               <div>
-                <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">Neural ID (Email)</label>
+                <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">{t.settings_labels_email}</label>
                 <CyberInput 
                   value={profile.email}
                   onChange={(e) => setProfile({...profile, email: e.target.value})}
                 />
               </div>
               <div>
-                <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">Avatar URL (Optional)</label>
+                <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">{t.settings_labels_avatar}</label>
                 <CyberInput 
                   value={profile.avatar.startsWith('data:') ? '(Local Image Uploaded)' : profile.avatar}
                   onChange={(e) => setProfile({...profile, avatar: e.target.value})}
@@ -137,14 +139,14 @@ const Settings: React.FC = () => {
                     onClick={() => setProfile({...profile, avatar: ''})}
                     className="text-xs text-red-500 hover:text-red-400 mt-1 uppercase tracking-wider"
                   >
-                    Clear Upload
+                    {t.settings_clear}
                   </button>
                 )}
               </div>
               <div className="pt-2 flex justify-end">
                 <CyberButton variant="secondary" onClick={handleSaveProfile} className="flex items-center gap-2 w-full md:w-auto justify-center">
                   <Save size={16} />
-                  UPDATE IDENTITY
+                  {t.settings_update}
                 </CyberButton>
               </div>
             </div>
@@ -155,12 +157,12 @@ const Settings: React.FC = () => {
         <CyberCard>
           <div className="flex items-center gap-3 mb-6">
             <RefreshCw className="text-neon-cyan" />
-            <h3 className="text-lg md:text-xl font-display text-white">TIMER CALIBRATION</h3>
+            <h3 className="text-lg md:text-xl font-display text-white">{t.settings_timer}</h3>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <div>
-              <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">Focus (min)</label>
+              <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">{t.settings_labels_focus}</label>
               <CyberInput 
                 type="number" 
                 value={config.focusDuration}
@@ -168,7 +170,7 @@ const Settings: React.FC = () => {
               />
             </div>
             <div>
-              <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">Short Break (min)</label>
+              <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">{t.settings_labels_short}</label>
               <CyberInput 
                 type="number" 
                 value={config.shortBreakDuration}
@@ -176,7 +178,7 @@ const Settings: React.FC = () => {
               />
             </div>
             <div>
-              <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">Long Break (min)</label>
+              <label className="text-gray-400 text-xs uppercase tracking-widest block mb-2">{t.settings_labels_long}</label>
               <CyberInput 
                 type="number" 
                 value={config.longBreakDuration}
@@ -193,7 +195,7 @@ const Settings: React.FC = () => {
                  onChange={(e) => setConfig({...config, autoStartBreaks: e.target.checked})}
                  className="w-4 h-4 accent-neon-cyan"
                />
-               <span className="text-sm font-bold text-gray-300">Auto-start Breaks</span>
+               <span className="text-sm font-bold text-gray-300">{t.settings_labels_auto_break}</span>
              </label>
              <label className="flex items-center gap-3 p-3 rounded border border-white/10 hover:border-neon-cyan/50 cursor-pointer bg-black/20 transition-colors">
                <input 
@@ -202,14 +204,14 @@ const Settings: React.FC = () => {
                  onChange={(e) => setConfig({...config, autoStartPomodoros: e.target.checked})}
                  className="w-4 h-4 accent-neon-cyan"
                />
-               <span className="text-sm font-bold text-gray-300">Auto-start Pomodoros</span>
+               <span className="text-sm font-bold text-gray-300">{t.settings_labels_auto_pomodoro}</span>
              </label>
           </div>
 
           <div className="mt-8 flex justify-end">
             <CyberButton variant="primary" onClick={handleSaveConfig} className="flex items-center gap-2 w-full md:w-auto justify-center">
               <Save size={16} />
-              SAVE CONFIG
+              {t.settings_save}
             </CyberButton>
           </div>
         </CyberCard>
@@ -218,18 +220,18 @@ const Settings: React.FC = () => {
         <CyberCard className="border-red-900/50 bg-red-950/5">
           <div className="flex items-center gap-3 mb-6">
              <AlertTriangle className="text-red-500" />
-             <h3 className="text-lg md:text-xl font-display text-red-500">DANGER ZONE</h3>
+             <h3 className="text-lg md:text-xl font-display text-red-500">{t.settings_danger}</h3>
           </div>
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <p className="text-gray-400 text-sm max-w-md">
-              Irreversible action. This will wipe all local data, clear your settings, and reset statistics.
+              {t.settings_warning}
             </p>
             <CyberButton variant="danger" onClick={() => {
               if(window.confirm('WARNING: Confirm system wipe? This cannot be undone.')) {
                 factoryReset();
               }
             }} className="w-full md:w-auto justify-center">
-              FACTORY RESET
+              {t.settings_factory_reset}
             </CyberButton>
           </div>
         </CyberCard>

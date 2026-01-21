@@ -3,10 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../store/useStore';
 import { CyberButton, CyberInput } from '../components/ui/CyberComponents';
 import { Plus, Trash2, StickyNote } from 'lucide-react';
+import { translations } from '../utils/i18n';
 
 const NotesPage: React.FC = () => {
-  const { notes, addNote, deleteNote } = useStore();
+  const { notes, addNote, deleteNote, language } = useStore();
   const [newNote, setNewNote] = useState('');
+  const t = translations[language];
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,22 +34,22 @@ const NotesPage: React.FC = () => {
     >
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-3xl font-display font-bold text-white tracking-tighter">
-          DATA <span className="text-emerald-400">FRAGMENTS</span>
+          {t.notes_header_1} <span className="text-emerald-400">{t.notes_header_2}</span>
         </h2>
-        <div className="text-emerald-400 font-mono text-sm">{notes.length} RECORDS</div>
+        <div className="text-emerald-400 font-mono text-sm">{notes.length} {t.notes_records}</div>
       </div>
 
       <div className="mb-10">
         <form onSubmit={handleAdd} className="flex gap-4">
           <CyberInput 
-             placeholder="Input new data fragment..." 
+             placeholder={t.notes_placeholder}
              value={newNote}
              onChange={e => setNewNote(e.target.value)}
              className="border-emerald-500/50 text-emerald-400 focus:border-emerald-400 placeholder:text-emerald-900/50"
           />
           <CyberButton className="border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-black hover:shadow-[0_0_20px_rgba(52,211,153,0.5)]">
             <Plus size={20} />
-            <span className="hidden md:inline ml-2">SAVE RECORD</span>
+            <span className="hidden md:inline ml-2">{t.notes_save}</span>
           </CyberButton>
         </form>
       </div>
@@ -76,7 +78,7 @@ const NotesPage: React.FC = () => {
                <p className="font-sans text-lg font-medium leading-relaxed whitespace-pre-wrap">{note.content}</p>
                
                <div className="mt-4 pt-4 border-t border-current border-opacity-20 text-[10px] uppercase font-bold tracking-widest opacity-60">
-                 {new Date(note.createdAt).toLocaleString()}
+                 {new Date(note.createdAt).toLocaleString(language === 'zh' ? 'zh-CN' : 'en-US')}
                </div>
              </motion.div>
           ))}
@@ -84,7 +86,7 @@ const NotesPage: React.FC = () => {
         
         {notes.length === 0 && (
           <div className="col-span-full py-20 text-center border-2 border-dashed border-gray-800 rounded-lg">
-            <p className="text-gray-600 font-display">NO DATA FRAGMENTS FOUND</p>
+            <p className="text-gray-600 font-display">{t.notes_empty}</p>
           </div>
         )}
       </div>

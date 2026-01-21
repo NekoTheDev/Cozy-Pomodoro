@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Plus, Check, Trash2, CheckCircle2, Circle, ListTodo, CalendarRange } from 'lucide-react';
 import { CyberCard, CyberButton, CyberInput } from '../components/ui/CyberComponents';
 import { useStore } from '../store/useStore';
+import { translations } from '../utils/i18n';
 
 const CalendarPage: React.FC = () => {
-  const { plans, addPlan, addPlanRange, togglePlan, deletePlan } = useStore();
+  const { plans, addPlan, addPlanRange, togglePlan, deletePlan, language } = useStore();
+  const t = translations[language];
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [newPlanTitle, setNewPlanTitle] = useState('');
@@ -112,11 +114,11 @@ const CalendarPage: React.FC = () => {
       <div className="flex-1">
         <div className="flex items-center justify-between mb-6 md:mb-8">
           <h2 className="text-2xl md:text-3xl font-display font-bold text-white tracking-tighter">
-            TEMPORAL <span className="text-neon-yellow">GRID</span>
+            {t.calendar_header_1} <span className="text-neon-yellow">{t.calendar_header_2}</span>
           </h2>
           <div className="flex gap-2">
             <CyberButton size="sm" variant="ghost" onClick={handlePrev}><ChevronLeft size={20} /></CyberButton>
-            <CyberButton size="sm" onClick={handleToday} className="hidden md:flex">TODAY</CyberButton>
+            <CyberButton size="sm" onClick={handleToday} className="hidden md:flex">{t.calendar_today}</CyberButton>
             <CyberButton size="sm" variant="ghost" onClick={handleNext}><ChevronRight size={20} /></CyberButton>
           </div>
         </div>
@@ -125,7 +127,7 @@ const CalendarPage: React.FC = () => {
           <div className="flex items-center gap-3 mb-4 md:mb-6">
              <CalendarIcon className="text-neon-yellow" size={24} />
              <span className="text-lg md:text-2xl font-display font-bold text-white uppercase">
-               {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+               {currentDate.toLocaleString(language === 'zh' ? 'zh-CN' : 'default', { month: 'long', year: 'numeric' })}
              </span>
           </div>
 
@@ -177,10 +179,10 @@ const CalendarPage: React.FC = () => {
         <div className="flex items-center justify-between mb-4 md:mb-8 h-[44px]"> {/* Height matching header */}
           <div className="flex items-center gap-2 text-gray-400">
              <ListTodo size={20} />
-             <span className="font-bold text-sm tracking-wider uppercase">Objectives</span>
+             <span className="font-bold text-sm tracking-wider uppercase">{t.calendar_objectives}</span>
           </div>
           <div className="text-xs font-mono text-neon-yellow">
-            {selectedDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
+            {selectedDate.toLocaleDateString(language === 'zh' ? 'zh-CN' : undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
           </div>
         </div>
 
@@ -191,7 +193,7 @@ const CalendarPage: React.FC = () => {
           <form onSubmit={handleAddPlan} className="mb-6 flex flex-col gap-3">
              <div className="flex gap-2">
                 <CyberInput 
-                placeholder="New objective..." 
+                placeholder={t.calendar_new}
                 value={newPlanTitle}
                 onChange={(e) => setNewPlanTitle(e.target.value)}
                 className="bg-black/40 border-white/10 focus:border-neon-magenta/50 text-sm flex-1"
@@ -212,7 +214,7 @@ const CalendarPage: React.FC = () => {
                   className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider transition-colors ${isMultiDay ? 'text-neon-yellow' : 'text-gray-500 hover:text-gray-300'}`}
                 >
                     <CalendarRange size={14} />
-                    {isMultiDay ? 'Multi-Day' : 'Single Day'}
+                    {isMultiDay ? t.calendar_multiday : t.calendar_singleday}
                 </button>
 
                 <AnimatePresence>
@@ -223,7 +225,7 @@ const CalendarPage: React.FC = () => {
                           exit={{ opacity: 0, width: 0 }}
                           className="flex items-center gap-2 overflow-hidden"
                         >
-                            <span className="text-[10px] text-gray-500 font-bold">UNTIL</span>
+                            <span className="text-[10px] text-gray-500 font-bold">{t.calendar_until}</span>
                             <input 
                               type="date"
                               required={isMultiDay}
@@ -279,7 +281,7 @@ const CalendarPage: React.FC = () => {
                    <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-2">
                       <ListTodo size={24} opacity={0.5} />
                    </div>
-                   <span className="text-xs font-bold uppercase tracking-widest">No objectives set</span>
+                   <span className="text-xs font-bold uppercase tracking-widest">{t.calendar_empty}</span>
                 </div>
               )}
             </AnimatePresence>
