@@ -19,7 +19,18 @@ export const Layout: React.FC = () => {
   };
 
   const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'zh' : 'en');
+    if (language === 'en') setLanguage('zh');
+    else if (language === 'zh') setLanguage('vi');
+    else setLanguage('en');
+  };
+
+  const getLanguageLabel = () => {
+    switch(language) {
+      case 'en': return 'EN';
+      case 'zh': return '中文';
+      case 'vi': return 'VIỆT';
+      default: return 'EN';
+    }
   };
 
   const navItems = [
@@ -174,10 +185,10 @@ export const Layout: React.FC = () => {
                 <button 
                   onClick={toggleLanguage}
                   className={`flex items-center gap-3 text-stone-500 hover:text-stone-200 transition-colors ${isCompact ? 'justify-center' : 'px-3'}`}
-                  title={language === 'en' ? "Switch to Chinese" : "切换到英文"}
+                  title="Switch Language"
                 >
                   <Languages size={18} />
-                  {!isCompact && <span className="text-xs font-bold uppercase tracking-wider">{language === 'en' ? 'EN / 中文' : '中文 / EN'}</span>}
+                  {!isCompact && <span className="text-xs font-bold uppercase tracking-wider">{getLanguageLabel()}</span>}
                 </button>
 
                 {/* Decorative separator only if not compact */}
