@@ -96,6 +96,16 @@ export const translations = {
     calendar_until: "UNTIL",
     calendar_empty: "No objectives set",
 
+    // Theme
+    theme_title: "VISUAL ENVIRONMENT",
+    theme_desktop: "Desktop & Wide",
+    theme_tablet: "Tablet & Square",
+    theme_mobile: "Mobile & Portrait",
+    theme_upload_title: "Local Device Source",
+    theme_upload_desc: "CLICK TO UPLOAD IMAGE",
+    theme_upload_sub: "MAX SIZE: 2MB // FORMAT: JPG, PNG",
+    theme_confirm: "CONFIRM SELECTION",
+
     // Auth
     auth_welcome: "Welcome Back",
     auth_join: "Join the Sanctuary",
@@ -203,6 +213,16 @@ export const translations = {
     calendar_singleday: "单天",
     calendar_until: "直到",
     calendar_empty: "未设定目标",
+
+    // Theme
+    theme_title: "视觉环境",
+    theme_desktop: "桌面与宽屏",
+    theme_tablet: "平板与方形",
+    theme_mobile: "移动端与竖屏",
+    theme_upload_title: "本地设备源",
+    theme_upload_desc: "点击上传图片",
+    theme_upload_sub: "最大: 2MB // 格式: JPG, PNG",
+    theme_confirm: "确认选择",
 
     // Auth
     auth_welcome: "欢迎回来",

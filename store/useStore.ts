@@ -3,14 +3,32 @@ import { User, Task, TimerSettings, TimerMode, Note, Plan, Language } from '../t
 import * as api from '../services/fakeBackend';
 import { playSFX } from '../utils/audio';
 
+export const BACKGROUND_PRESETS = {
+  desktop: [
+    "https://i.pinimg.com/736x/e0/e1/ff/e0e1ffc51f1118fc39a81e2e0ab577d6.jpg", // New Desktop
+    "https://i.pinimg.com/1200x/fb/4e/b9/fb4eb9ee4ec6bb207bc2c3efcc439695.jpg", // Default Warm
+    "https://i.pinimg.com/1200x/4a/02/fa/4a02faf5a646c9765182b4af6fe056c0.jpg", // Cozy Window
+    "https://i.pinimg.com/1200x/81/59/e0/8159e00bf1b72ec93bce8e002d9edc72.jpg", // Snow Cabin
+  ],
+  tablet: [
+    "https://i.pinimg.com/736x/14/e5/a3/14e5a33c8dc5b9f836e8535ac61f1654.jpg", // New Tablet
+    "https://i.pinimg.com/736x/aa/98/4d/aa984df5a8ce94689588b835a8754fd4.jpg", // Dark Rain
+  ],
+  mobile: [
+    "https://i.pinimg.com/1200x/ac/4d/93/ac4d938a6b3f44bce75b38b15c06f367.jpg", // New Mobile 1
+    "https://i.pinimg.com/736x/e5/8a/1f/e58a1f317bbf36ce905f6cdf0244fc04.jpg", // New Mobile 2
+    "https://i.pinimg.com/1200x/43/6f/8f/436f8fa1f13f0cd652065264f0eaf5ed.jpg", // New Mobile 3
+    "https://i.pinimg.com/736x/b9/73/4f/b9734fc8852268ca7d21712d89e87ff6.jpg", // Autumn Train
+    "https://i.pinimg.com/736x/b9/6b/67/b96b678ca060a545fe78108db68da9cf.jpg", // Book Coffee
+    "https://i.pinimg.com/736x/9e/23/f0/9e23f0e8bacb5f03ad6418a3bdd1727b.jpg", // Night City
+  ]
+};
+
+// Flattened list for cycling logic and compatibility
 export const PRESET_BACKGROUNDS = [
-  "https://i.pinimg.com/1200x/fb/4e/b9/fb4eb9ee4ec6bb207bc2c3efcc439695.jpg", // Default Warm
-  "https://i.pinimg.com/1200x/4a/02/fa/4a02faf5a646c9765182b4af6fe056c0.jpg", // Preset 2 (Cozy Window)
-  "https://i.pinimg.com/736x/aa/98/4d/aa984df5a8ce94689588b835a8754fd4.jpg", // Preset 3 (Dark Rain)
-  "https://i.pinimg.com/736x/b9/73/4f/b9734fc8852268ca7d21712d89e87ff6.jpg", // Preset 4 (Autumn Train)
-  "https://i.pinimg.com/736x/b9/6b/67/b96b678ca060a545fe78108db68da9cf.jpg", // Preset 5 (Book Coffee)
-  "https://i.pinimg.com/736x/9e/23/f0/9e23f0e8bacb5f03ad6418a3bdd1727b.jpg", // Preset 6 (Night City)
-  "https://i.pinimg.com/1200x/81/59/e0/8159e00bf1b72ec93bce8e002d9edc72.jpg", // Preset 7 (Snow Cabin)
+  ...BACKGROUND_PRESETS.desktop,
+  ...BACKGROUND_PRESETS.tablet,
+  ...BACKGROUND_PRESETS.mobile
 ];
 
 interface AppState {
@@ -538,12 +556,18 @@ export const useStore = create<AppState>((set, get) => ({
   },
   cycleBackground: () => {
     const current = get().backgroundImage;
-    const currentIndex = PRESET_BACKGROUNDS.indexOf(current);
-    const nextIndex = (currentIndex + 1) % PRESET_BACKGROUNDS.length;
-    const nextBg = PRESET_BACKGROUNDS[nextIndex];
+    // Helper to find flat list
+    const all = [
+      ...BACKGROUND_PRESETS.desktop,
+      ...BACKGROUND_PRESETS.tablet,
+      ...BACKGROUND_PRESETS.mobile
+    ];
+    const currentIndex = all.indexOf(current);
+    const nextIndex = (currentIndex + 1) % all.length;
+    const nextBg = all[nextIndex];
     
     if (currentIndex === -1) {
-       get().setBackgroundImage(PRESET_BACKGROUNDS[0]);
+       get().setBackgroundImage(all[0]);
     } else {
        get().setBackgroundImage(nextBg);
     }
