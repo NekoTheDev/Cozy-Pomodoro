@@ -1,6 +1,6 @@
 
 export type TimerMode = 'FOCUS' | 'SHORT_BREAK' | 'LONG_BREAK';
-export type Language = 'en' | 'zh';
+export type Language = 'en' | 'zh' | 'vi';
 
 export interface User {
   id: string;
