@@ -99,7 +99,29 @@ const DEFAULT_SETTINGS: TimerSettings = {
 const getStoredNotes = (): Note[] => {
   try {
     const stored = localStorage.getItem('notes');
-    return stored ? JSON.parse(stored) : [];
+    if (stored) return JSON.parse(stored);
+
+    // Realistic Default Notes
+    return [
+        {
+            id: 'n1',
+            content: "PROJECT TITAN - Next Steps\n- optimize render loop for 60fps\n- fix memory leak in audio buffer\n- deploy to edge nodes before Q3",
+            createdAt: new Date(Date.now() - 100000000).toISOString(),
+            color: 'cyan'
+        },
+        {
+            id: 'n2',
+            content: "Daily Mantra:\nFocus on the process, not the outcome. The flow state is the reward in itself.",
+            createdAt: new Date(Date.now() - 50000000).toISOString(),
+            color: 'magenta'
+        },
+        {
+            id: 'n3',
+            content: "Meeting Notes 10/24\nTeam is aligned on the Q4 goals. Need to hire 2 more frontend engineers for the mobile dashboard initiative.",
+            createdAt: new Date(Date.now() - 20000000).toISOString(),
+            color: 'yellow'
+        }
+    ];
   } catch { return []; }
 };
 
@@ -108,11 +130,21 @@ const getStoredPlans = (): Plan[] => {
     const stored = localStorage.getItem('plans');
     if (stored) return JSON.parse(stored);
     
-    // Seed default plans if empty
-    const today = new Date().toISOString().split('T')[0];
+    // Seed realistic default plans
+    const today = new Date();
+    const formatDate = (offset: number) => {
+        const d = new Date(today);
+        d.setDate(d.getDate() + offset);
+        return d.toISOString().split('T')[0];
+    };
+
     return [
-      { id: 'p1', date: today, title: 'Review system diagnostics', isCompleted: false },
-      { id: 'p2', date: today, title: 'Deep focus session (2h)', isCompleted: true }
+      { id: 'p1', date: formatDate(0), title: 'System Diagnostics & Review', isCompleted: false },
+      { id: 'p2', date: formatDate(0), title: 'Deep Work Block: Architecture', isCompleted: true },
+      { id: 'p3', date: formatDate(1), title: 'Client Meeting: Phase 2', isCompleted: false },
+      { id: 'p4', date: formatDate(2), title: 'Quarterly Planning', isCompleted: false },
+      { id: 'p5', date: formatDate(5), title: 'Backup Archives', isCompleted: false },
+      { id: 'p6', date: formatDate(7), title: 'Learning Session: Rust', isCompleted: false },
     ];
   } catch { return []; }
 };

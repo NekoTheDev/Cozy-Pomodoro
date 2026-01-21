@@ -178,10 +178,30 @@ export const apiGetStats = async (daysArg: number = 7): Promise<DailyStat[]> => 
     const d = new Date(today);
     d.setDate(today.getDate() - i);
     
+    // Realistic data generation
+    const dayOfWeek = d.getDay();
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    
+    // Base focus: weekends lower (0-60m), weekdays higher (60-300m)
+    let baseFocus = isWeekend ? Math.random() * 90 : 60 + Math.random() * 240;
+    
+    // Add some trend/seasonality (e.g., using sin wave based on index to simulate fluctuations over the year)
+    // Periodicity of roughly 30 days
+    baseFocus += Math.sin(i / 5) * 40; 
+    
+    // Random spikes/drops
+    const rand = Math.random();
+    if (rand > 0.95) baseFocus *= 1.5; // Flow state day
+    if (rand < 0.1) baseFocus *= 0.2; // Distracted day
+
+    const focusMinutes = Math.max(0, Math.floor(baseFocus));
+    // Tasks: roughly 1 task per 45 mins of focus, with variance
+    const tasksCompleted = Math.max(0, Math.floor((focusMinutes / 45) * (0.8 + Math.random() * 0.4)));
+
     stats.push({
       date: d.toISOString().split('T')[0],
-      focusMinutes: Math.floor(Math.random() * 200) + 20,
-      tasksCompleted: Math.floor(Math.random() * 8)
+      focusMinutes,
+      tasksCompleted
     });
   }
   return stats;

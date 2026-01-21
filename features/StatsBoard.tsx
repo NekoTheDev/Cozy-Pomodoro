@@ -52,6 +52,18 @@ export const StatsBoard: React.FC = () => {
   const totalFocus = data.reduce((acc, curr) => acc + curr.focusMinutes, 0);
   const totalTasks = data.reduce((acc, curr) => acc + curr.tasksCompleted, 0);
 
+  // Format tick date based on range size
+  const formatTick = (dateStr: string) => {
+    if (range > 60) {
+        // For year view, show Month
+        const date = new Date(dateStr);
+        // Show month only on 1st or 15th roughly, handled by interval, but text is Month
+        return date.toLocaleDateString('en-US', { month: 'short' });
+    }
+    // Short view
+    return dateStr.slice(5); // MM-DD
+  };
+
   return (
     <div className="space-y-8 max-w-5xl mx-auto px-0 md:px-0">
       
@@ -73,6 +85,12 @@ export const StatsBoard: React.FC = () => {
                className={`flex-1 sm:flex-none px-4 py-2 sm:py-1.5 text-[10px] font-bold rounded-md transition-all uppercase tracking-wider ${range === 30 ? 'bg-white/10 text-stone-200' : 'text-stone-600 hover:text-stone-300'}`}
              >
                30 Days
+             </button>
+             <button 
+               onClick={() => setRange(365)}
+               className={`flex-1 sm:flex-none px-4 py-2 sm:py-1.5 text-[10px] font-bold rounded-md transition-all uppercase tracking-wider ${range === 365 ? 'bg-white/10 text-stone-200' : 'text-stone-600 hover:text-stone-300'}`}
+             >
+               1 Year
              </button>
            </div>
          </div>
@@ -130,9 +148,9 @@ export const StatsBoard: React.FC = () => {
                   dataKey="date" 
                   stroke="#44403c" 
                   tick={{ fill: '#78716c', fontSize: 10, fontFamily: 'Nunito' }} 
-                  tickFormatter={(val) => range > 7 ? val.slice(5) : val}
+                  tickFormatter={formatTick}
                   dy={10}
-                  interval={range > 14 ? 2 : 0}
+                  interval={range > 60 ? 30 : range > 14 ? 2 : 0}
                   axisLine={false}
                   tickLine={false}
                 />
@@ -146,8 +164,8 @@ export const StatsBoard: React.FC = () => {
                 <Bar 
                   dataKey="focusMinutes" 
                   fill="url(#barGradient)" 
-                  radius={[4, 4, 0, 0]} 
-                  barSize={range > 7 ? 12 : 30}
+                  radius={[2, 2, 0, 0]} 
+                  barSize={range > 60 ? 4 : range > 7 ? 12 : 30}
                 />
               </BarChart>
             </ResponsiveContainer>
