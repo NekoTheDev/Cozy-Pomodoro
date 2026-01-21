@@ -206,7 +206,7 @@ const Dashboard: React.FC = () => {
           className={`p-4 md:p-8 flex justify-center pb-20 md:pb-12 transition-all duration-500 ${isZenMode ? 'translate-y-32 hover:translate-y-0' : 'translate-y-0'}`}
         >
            {/* Responsive Container for dock items */}
-           <div className="bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl px-4 md:px-8 py-3 md:py-4 flex items-center justify-between md:justify-center gap-4 md:gap-8 shadow-xl hover:bg-black/40 transition-colors max-w-[calc(100vw-32px)] overflow-x-auto no-scrollbar">
+           <div className="bg-black/30 backdrop-blur-xl border border-white/10 rounded-3xl px-6 py-4 flex items-center justify-between md:justify-center gap-6 shadow-2xl hover:bg-black/40 transition-colors max-w-[calc(100vw-32px)] overflow-x-auto no-scrollbar">
               <DockItem 
                 icon={ImageIcon} 
                 label={t.dock_scenery} 
@@ -218,7 +218,7 @@ const Dashboard: React.FC = () => {
                 onClick={cycleTimerMode}
                 active={timerMode !== 'FOCUS'}
               />
-              <div className="w-px h-8 bg-white/10 mx-2 hidden md:block" />
+              <div className="w-px h-10 bg-white/5 mx-2 hidden md:block" />
               <DockItem 
                 icon={PictureInPicture}
                 label={pipWindow ? t.dock_exit_pip : t.dock_pip}
@@ -329,12 +329,18 @@ const Dashboard: React.FC = () => {
 const DockItem: React.FC<{ icon: any, label: string, active?: boolean, onClick?: () => void }> = ({ icon: Icon, label, active, onClick }) => (
   <button 
     onClick={onClick}
-    className={`flex flex-col items-center gap-2 group relative min-w-[60px] shrink-0 ${active ? 'text-cozy-orange' : 'text-gray-400 hover:text-white'}`}
+    className="flex flex-col items-center gap-1.5 group min-w-[60px] shrink-0 outline-none"
   >
-    <div className={`p-3 rounded-xl transition-all duration-300 ${active ? 'bg-orange-500/20' : 'bg-white/5 group-hover:bg-white/10 group-hover:-translate-y-1'}`}>
-      <Icon size={20} />
+    <div className={`p-3.5 rounded-2xl transition-all duration-300 border ${
+      active 
+        ? 'bg-cozy-amber/10 text-cozy-amber border-cozy-amber/20 shadow-[0_0_15px_rgba(251,191,36,0.1)]' 
+        : 'bg-white/5 text-stone-500 border-white/5 group-hover:bg-white/10 group-hover:text-stone-300 group-hover:border-white/10 group-hover:-translate-y-1'
+    }`}>
+      <Icon size={20} strokeWidth={active ? 2.5 : 2} />
     </div>
-    <span className="text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-all duration-200 absolute -top-8 bg-black/80 px-2 py-1 rounded text-white whitespace-nowrap pointer-events-none z-50">
+    <span className={`text-[9px] font-bold uppercase tracking-widest transition-colors duration-300 ${
+      active ? 'text-cozy-amber' : 'text-stone-600 group-hover:text-stone-400'
+    }`}>
       {label}
     </span>
   </button>
