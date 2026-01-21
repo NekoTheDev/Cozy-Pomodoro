@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Timer } from '../features/Timer';
 import { TaskBoard } from '../features/TaskBoard';
 import { ThemePicker } from '../features/ThemePicker';
@@ -16,7 +17,8 @@ import {
   Volume2,
   VolumeX,
   Minimize2,
-  Tent
+  Tent,
+  PictureInPicture
 } from 'lucide-react';
 import { Particles } from '../components/ui/Particles';
 
@@ -31,13 +33,15 @@ const Dashboard: React.FC = () => {
     toggleSound,
     setTimerMode,
     timerMode,
-    language
+    language,
+    showToast
   } = useStore();
 
   const t = translations[language];
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showThemePicker, setShowThemePicker] = useState(false);
+  const [pipWindow, setPipWindow] = useState<Window | null>(null);
 
   const handleFullScreen = () => {
     if (!document.fullscreenElement) {
@@ -61,6 +65,68 @@ const Dashboard: React.FC = () => {
     if (timerMode === 'FOCUS') setTimerMode('SHORT_BREAK');
     else if (timerMode === 'SHORT_BREAK') setTimerMode('LONG_BREAK');
     else setTimerMode('FOCUS');
+  };
+
+  const togglePiP = async () => {
+    // If PiP is open, close it
+    if (pipWindow) {
+      pipWindow.close();
+      setPipWindow(null);
+      return;
+    }
+
+    // Check support for Document Picture-in-Picture
+    if (!('documentPictureInPicture' in window)) {
+      showToast(t.pip_unsupported, 'error');
+      return;
+    }
+
+    try {
+      // @ts-ignore - TS doesn't fully support documentPictureInPicture type yet
+      const pip = await window.documentPictureInPicture.requestWindow({
+        width: 450,
+        height: 450,
+      });
+
+      // Inject App Styles into PiP Window
+      // We copy all style tags and link tags (Tailwind CDN, Fonts)
+      Array.from(document.head.children).forEach((child) => {
+        if (child.tagName === 'LINK' || child.tagName === 'STYLE') {
+            pip.document.head.appendChild(child.cloneNode(true));
+        }
+        // Specific handling for Tailwind CDN script if present in head
+        if (child.tagName === 'SCRIPT' && (child as HTMLScriptElement).src?.includes('tailwindcss')) {
+             const script = document.createElement('script');
+             script.src = (child as HTMLScriptElement).src;
+             pip.document.head.appendChild(script);
+        }
+      });
+      
+      // Add custom styles for the PiP body
+      const style = pip.document.createElement('style');
+      style.textContent = `
+        body { 
+          background-color: #1c1917; 
+          color: #e7e5e4; 
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          margin: 0;
+        }
+      `;
+      pip.document.head.appendChild(style);
+
+      // Handle closing via "X" button on window
+      pip.addEventListener('pagehide', () => {
+        setPipWindow(null);
+      });
+
+      setPipWindow(pip);
+    } catch (err) {
+      console.error(err);
+      showToast("Could not open mini view.", 'error');
+    }
   };
 
   return (
@@ -148,6 +214,12 @@ const Dashboard: React.FC = () => {
               />
               <div className="w-px h-8 bg-white/10 mx-2 hidden md:block" />
               <DockItem 
+                icon={PictureInPicture}
+                label={pipWindow ? t.dock_exit_pip : t.dock_pip}
+                active={!!pipWindow}
+                onClick={togglePiP}
+              />
+              <DockItem 
                 icon={isFullscreen ? Minimize2 : Maximize2} 
                 label={isFullscreen ? t.dock_exit_full : t.dock_fullscreen} 
                 active={isFullscreen}
@@ -222,6 +294,17 @@ const Dashboard: React.FC = () => {
           <ThemePicker onClose={() => setShowThemePicker(false)} />
         )}
       </AnimatePresence>
+
+      {/* PiP Portal: Renders the Timer into the floating window if active */}
+      {pipWindow && createPortal(
+        <div className="h-full w-full flex items-center justify-center p-4 bg-cozy-dark">
+           {/* Scale down the timer slightly for the mini window */}
+           <div className="transform scale-75 origin-center">
+             <Timer isPassive={true} />
+           </div>
+        </div>,
+        pipWindow.document.body
+      )}
     </div>
   );
 };

@@ -30,6 +30,9 @@ export const translations = {
     dock_exit_full: "Exit Full",
     dock_deep_focus: "Deep Focus",
     dock_exit_focus: "Exit Focus",
+    dock_pip: "Mini View",
+    dock_exit_pip: "Close Mini",
+    pip_unsupported: "Your browser doesn't support Mini Window mode.",
 
     // Tasks
     tasks_title: "Today's Plan",
@@ -148,6 +151,9 @@ export const translations = {
     dock_exit_full: "退出全屏",
     dock_deep_focus: "深度模式",
     dock_exit_focus: "退出",
+    dock_pip: "迷你视图",
+    dock_exit_pip: "关闭迷你",
+    pip_unsupported: "您的浏览器不支持迷你窗口模式。",
 
     // Tasks
     tasks_title: "今日计划",

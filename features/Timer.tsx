@@ -4,7 +4,11 @@ import { Play, Pause, RefreshCw, SkipForward, Flame, Coffee, Moon } from 'lucide
 import { useStore } from '../store/useStore';
 import { translations } from '../utils/i18n';
 
-export const Timer: React.FC = () => {
+interface TimerProps {
+  isPassive?: boolean; // If true, this timer instance acts as a visual mirror and won't trigger tick updates
+}
+
+export const Timer: React.FC<TimerProps> = ({ isPassive = false }) => {
   const {
     timerMode,
     timeLeft,
@@ -23,6 +27,8 @@ export const Timer: React.FC = () => {
   const t = translations[language];
 
   useEffect(() => {
+    if (isPassive) return; // Don't run intervals if this is a passive mirror
+    
     let interval: any = null;
     if (isActive && timeLeft > 0) {
       interval = setInterval(tickTimer, 1000);
@@ -30,7 +36,7 @@ export const Timer: React.FC = () => {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [isActive, timeLeft, tickTimer]);
+  }, [isActive, timeLeft, tickTimer, isPassive]);
 
   const activeTask = tasks.find(t => t.id === activeTaskId);
 
