@@ -1,5 +1,11 @@
 # 🔮 COZY FOCUS | Digital Sanctuary
 
+<div align="center">
+
+[🇨🇳 中文文档](./README_zh.md) | **🇺🇸 English**
+
+</div>
+
 ![License](https://img.shields.io/badge/license-BSD_3--Clause-blue.svg)
 ![React](https://img.shields.io/badge/react-v18.3.1-61DAFB.svg)
 ![TypeScript](https://img.shields.io/badge/typescript-v5.0-3178C6.svg)
