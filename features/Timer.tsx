@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, RefreshCw, SkipForward, Flame, Coffee, Moon } from 'lucide-react';
 import { useStore } from '../store/useStore';
+import { translations } from '../utils/i18n';
 
 export const Timer: React.FC = () => {
   const {
@@ -15,8 +16,11 @@ export const Timer: React.FC = () => {
     completeSession,
     setTimerMode,
     activeTaskId,
-    tasks
+    tasks,
+    language
   } = useStore();
+
+  const t = translations[language];
 
   useEffect(() => {
     let interval: any = null;
@@ -38,10 +42,10 @@ export const Timer: React.FC = () => {
 
   const getModeLabel = () => {
     switch(timerMode) {
-      case 'FOCUS': return 'Focus Session';
-      case 'SHORT_BREAK': return 'Short Pause';
-      case 'LONG_BREAK': return 'Long Rest';
-      default: return 'Idle';
+      case 'FOCUS': return t.timer_focus;
+      case 'SHORT_BREAK': return t.timer_short_break;
+      case 'LONG_BREAK': return t.timer_long_break;
+      default: return t.timer_idle;
     }
   };
 
@@ -193,7 +197,7 @@ export const Timer: React.FC = () => {
              <div className="bg-stone-900/80 px-4 py-2.5 md:px-6 md:py-3 rounded-xl border border-white/10 backdrop-blur-xl flex items-center gap-3 md:gap-4 shadow-lg cursor-default max-w-sm md:max-w-md w-full">
                 <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-cozy-amber shrink-0" />
                 <div className="flex flex-col min-w-0 flex-1">
-                   <span className="text-[9px] md:text-[10px] text-stone-400 font-bold tracking-wider uppercase">Focusing On</span>
+                   <span className="text-[9px] md:text-[10px] text-stone-400 font-bold tracking-wider uppercase">{t.tasks_focusing_on}</span>
                    <span className="text-stone-200 font-serif text-base md:text-lg italic truncate">{activeTask.title}</span>
                 </div>
                 <div className="text-[10px] md:text-xs font-sans font-bold text-stone-500 bg-white/5 px-2 py-1 rounded">

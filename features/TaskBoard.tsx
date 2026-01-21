@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useStore } from '../store/useStore';
+import { translations } from '../utils/i18n';
 import { Plus, Trash2, Check, Search, MoreHorizontal, Calendar, PenTool, X, Flame, ChevronUp, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CyberBadge } from '../components/ui/CyberComponents';
 
 export const TaskBoard: React.FC = () => {
-  const { tasks, fetchTasks, addTask, updateTask, deleteTask, isLoadingTasks, activeTaskId, setActiveTask } = useStore();
-  
+  const { tasks, fetchTasks, addTask, updateTask, deleteTask, isLoadingTasks, activeTaskId, setActiveTask, language } = useStore();
+  const t = translations[language];
+
   // UI State
   const [isAdding, setIsAdding] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -69,7 +71,7 @@ export const TaskBoard: React.FC = () => {
       <div className="p-8 pb-4 relative z-10">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-serif italic font-medium text-stone-100 flex items-center gap-3">
-            Today's Plan
+            {t.tasks_title}
           </h2>
           <div className="relative" ref={menuRef}>
             <button 
@@ -91,7 +93,7 @@ export const TaskBoard: React.FC = () => {
                     onClick={() => { setShowCompleted(!showCompleted); setShowMenu(false); }}
                     className="w-full text-left px-4 py-3 text-xs font-bold uppercase tracking-wider text-stone-400 hover:bg-white/5 hover:text-white flex items-center justify-between transition-colors"
                   >
-                    <span>Show Completed</span>
+                    <span>{t.tasks_show_completed}</span>
                     {showCompleted && <Check size={14} className="text-cozy-amber" />}
                   </button>
                 </motion.div>
@@ -117,7 +119,7 @@ export const TaskBoard: React.FC = () => {
            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 group-hover:text-stone-300 transition-colors" size={14} />
            <input 
              type="text" 
-             placeholder="Find a task..."
+             placeholder={t.tasks_search_placeholder}
              value={searchQuery}
              onChange={(e) => setSearchQuery(e.target.value)}
              className="w-full bg-white/5 border border-white/5 rounded-lg py-3 pl-10 pr-4 text-sm text-stone-200 focus:outline-none focus:bg-white/10 transition-all placeholder:text-stone-600 font-sans focus:border-white/10"
@@ -141,7 +143,7 @@ export const TaskBoard: React.FC = () => {
           <div className="flex flex-col items-center justify-center py-20 text-stone-600 opacity-60">
              <PenTool size={24} className="mb-3" />
              <p className="text-sm font-serif italic">
-               {searchQuery ? 'No matching tasks.' : 'Your journal is empty.'}
+               {searchQuery ? t.tasks_no_match : t.tasks_empty}
              </p>
           </div>
         ) : (
@@ -244,7 +246,7 @@ export const TaskBoard: React.FC = () => {
                  
                  {/* Priority Selector */}
                  <div className="flex flex-col gap-2">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-500">Priority Level</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-500">{t.tasks_priority}</span>
                     <div className="flex gap-2">
                        {(['LOW', 'MEDIUM', 'HIGH'] as const).map(p => (
                          <button
@@ -267,7 +269,7 @@ export const TaskBoard: React.FC = () => {
 
                  {/* Estimates */}
                  <div className="flex flex-col gap-2">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-500">Est. Pomodoros</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-500">{t.tasks_est}</span>
                     <div className="flex items-center gap-3 bg-white/5 rounded-lg p-1.5 w-fit border border-white/5">
                        <button 
                          type="button"
@@ -295,13 +297,13 @@ export const TaskBoard: React.FC = () => {
                    onClick={resetForm} 
                    className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-stone-500 hover:text-stone-300 transition-colors"
                  >
-                   Cancel
+                   {t.tasks_cancel}
                  </button>
                  <button 
                    type="submit" 
                    className="px-6 py-2 bg-stone-100 text-stone-900 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-white hover:scale-105 active:scale-95 transition-all shadow-lg"
                  >
-                   Save Task
+                   {t.tasks_save}
                  </button>
               </div>
            </motion.form>
@@ -313,7 +315,7 @@ export const TaskBoard: React.FC = () => {
             className="w-full py-4 border border-dashed border-stone-800 rounded-xl text-stone-500 hover:text-stone-300 hover:border-stone-600 hover:bg-white/5 transition-all flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest group"
           >
              <Plus size={16} />
-             <span>New Entry</span>
+             <span>{t.tasks_new_entry}</span>
           </motion.button>
         )}
       </div>

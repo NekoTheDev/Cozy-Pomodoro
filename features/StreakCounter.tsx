@@ -3,9 +3,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Flame } from 'lucide-react';
 import { useStore } from '../store/useStore';
+import { translations } from '../utils/i18n';
 
 export const StreakCounter: React.FC = () => {
-  const { streak } = useStore();
+  const { streak, language } = useStore();
+  const t = translations[language];
 
   const getColor = () => {
     if (streak > 0) return 'text-orange-400';
@@ -33,7 +35,7 @@ export const StreakCounter: React.FC = () => {
           {streak}
         </span>
         <span className="text-[10px] font-medium tracking-wide text-gray-500 mt-0.5">
-          STREAK
+          {t.streak_label}
         </span>
       </div>
     </div>

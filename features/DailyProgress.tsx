@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useStore } from '../store/useStore';
+import { translations } from '../utils/i18n';
 
 export const DailyProgress: React.FC = () => {
-  const { sessionsToday, settings } = useStore();
+  const { sessionsToday, settings, language } = useStore();
+  const t = translations[language];
   
   const goal = settings.dailyGoal || 4;
   const percentage = Math.min((sessionsToday / goal) * 100, 100);
@@ -63,7 +65,7 @@ export const DailyProgress: React.FC = () => {
       
       <div className="flex items-center gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
         <span className="text-[10px] font-medium text-gray-400 font-sans tracking-wide">
-          DAILY GOAL
+          {t.daily_goal_label}
         </span>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { ThemePicker } from '../features/ThemePicker';
 import { StreakCounter } from '../features/StreakCounter';
 import { DailyProgress } from '../features/DailyProgress';
 import { useStore } from '../store/useStore';
+import { translations } from '../utils/i18n';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Image as ImageIcon, 
@@ -29,8 +30,11 @@ const Dashboard: React.FC = () => {
     soundEnabled,
     toggleSound,
     setTimerMode,
-    timerMode
+    timerMode,
+    language
   } = useStore();
+
+  const t = translations[language];
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showThemePicker, setShowThemePicker] = useState(false);
@@ -99,7 +103,7 @@ const Dashboard: React.FC = () => {
               <button onClick={toggleSound} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                 {soundEnabled ? <Volume2 size={16} className="text-orange-300" /> : <VolumeX size={16} className="text-gray-400" />}
                 <span className="text-xs font-medium text-gray-200">
-                  {soundEnabled ? 'Ambience On' : 'Muted'}
+                  {soundEnabled ? t.ambience_on : t.ambience_off}
                 </span>
               </button>
            </motion.div>
@@ -133,25 +137,25 @@ const Dashboard: React.FC = () => {
            <div className="bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl px-4 md:px-8 py-3 md:py-4 flex items-center justify-between md:justify-center gap-4 md:gap-8 shadow-xl hover:bg-black/40 transition-colors max-w-[calc(100vw-32px)] overflow-x-auto no-scrollbar">
               <DockItem 
                 icon={ImageIcon} 
-                label="Scenery" 
+                label={t.dock_scenery} 
                 onClick={() => setShowThemePicker(true)}
               />
               <DockItem 
                 icon={Clock} 
-                label="Mode" 
+                label={t.dock_mode} 
                 onClick={cycleTimerMode}
                 active={timerMode !== 'FOCUS'}
               />
               <div className="w-px h-8 bg-white/10 mx-2 hidden md:block" />
               <DockItem 
                 icon={isFullscreen ? Minimize2 : Maximize2} 
-                label={isFullscreen ? "Exit Full" : "Full Screen"} 
+                label={isFullscreen ? t.dock_exit_full : t.dock_fullscreen} 
                 active={isFullscreen}
                 onClick={handleFullScreen}
               />
               <DockItem 
                 icon={Tent} 
-                label={isZenMode ? "Exit Focus" : "Deep Focus"} 
+                label={isZenMode ? t.dock_exit_focus : t.dock_deep_focus} 
                 active={isZenMode}
                 onClick={toggleZenMode}
               />

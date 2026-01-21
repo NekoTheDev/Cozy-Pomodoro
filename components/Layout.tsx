@@ -1,28 +1,34 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../store/useStore';
-import { LayoutDashboard, BarChart2, Settings, LogOut, Calendar, StickyNote, ScanEye, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { translations } from '../utils/i18n';
+import { LayoutDashboard, BarChart2, Settings, LogOut, Calendar, StickyNote, ScanEye, PanelLeftClose, PanelLeftOpen, Languages } from 'lucide-react';
 import { ToastContainer } from './ui/CyberComponents';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Layout: React.FC = () => {
-  const { user, logout, toast, isZenMode } = useStore();
+  const { user, logout, toast, isZenMode, language, setLanguage } = useStore();
   const navigate = useNavigate();
   const location = useLocation();
   const [isCompact, setIsCompact] = useState(false);
+  const t = translations[language];
 
   const handleLogout = async () => {
     await logout();
     navigate('/login');
   };
 
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'zh' : 'en');
+  };
+
   const navItems = [
-    { path: '/dashboard', label: 'Study', icon: LayoutDashboard },
-    { path: '/stats', label: 'Stats', icon: BarChart2 },
-    { path: '/calendar', label: 'Plan', icon: Calendar },
-    { path: '/notes', label: 'Notes', icon: StickyNote },
+    { path: '/dashboard', label: t.nav_study, icon: LayoutDashboard },
+    { path: '/stats', label: t.nav_stats, icon: BarChart2 },
+    { path: '/calendar', label: t.nav_plan, icon: Calendar },
+    { path: '/notes', label: t.nav_notes, icon: StickyNote },
     // Deep Focus is usually accessed via Dashboard, but kept in settings/desktop nav
-    { path: '/settings', label: 'Config', icon: Settings },
+    { path: '/settings', label: t.nav_config, icon: Settings },
   ];
 
   const isDashboard = location.pathname === '/dashboard';
@@ -84,7 +90,7 @@ export const Layout: React.FC = () => {
                    >
                      <div className="h-[1px] w-6 bg-stone-700 transition-all group-hover:w-12"></div>
                      <span className="text-[10px] font-mono uppercase tracking-widest text-stone-500">
-                       Main Menu
+                       {t.nav_main_menu}
                      </span>
                    </motion.div>
                 )}
@@ -156,7 +162,7 @@ export const Layout: React.FC = () => {
                        <ScanEye size={16} />
                     </div>
                     {!isCompact && (
-                      <span className="relative z-10 tracking-wide">Deep Focus</span>
+                      <span className="relative z-10 tracking-wide">{t.nav_deep_focus}</span>
                     )}
                   </NavLink>
               </nav>
@@ -164,6 +170,16 @@ export const Layout: React.FC = () => {
               {/* Footer / User Profile */}
               <div className={`mt-auto relative z-10 ${isCompact ? 'p-4 flex flex-col gap-4 items-center' : 'p-6 space-y-4'}`}>
                 
+                {/* Language Toggle */}
+                <button 
+                  onClick={toggleLanguage}
+                  className={`flex items-center gap-3 text-stone-500 hover:text-stone-200 transition-colors ${isCompact ? 'justify-center' : 'px-3'}`}
+                  title={language === 'en' ? "Switch to Chinese" : "切换到英文"}
+                >
+                  <Languages size={18} />
+                  {!isCompact && <span className="text-xs font-bold uppercase tracking-wider">{language === 'en' ? 'EN / 中文' : '中文 / EN'}</span>}
+                </button>
+
                 {/* Decorative separator only if not compact */}
                 {!isCompact && <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/5 to-transparent mb-2" />}
 
@@ -183,7 +199,7 @@ export const Layout: React.FC = () => {
                     <div className="flex flex-col overflow-hidden min-w-0">
                       <span className="text-sm font-bold text-stone-200 truncate group-hover:text-white transition-colors">{user?.name}</span>
                       <span className="text-[10px] text-emerald-500/80 font-mono uppercase tracking-wider group-hover:text-emerald-400 transition-colors">
-                         Online
+                         {t.nav_online}
                       </span>
                     </div>
                   )}
@@ -194,7 +210,7 @@ export const Layout: React.FC = () => {
                         <button 
                           onClick={handleLogout}
                           className="p-1.5 text-stone-500 hover:text-rose-400 hover:bg-white/5 rounded-lg transition-all"
-                          title="Sign Out"
+                          title={t.nav_logout}
                         >
                           <LogOut size={16} />
                         </button>

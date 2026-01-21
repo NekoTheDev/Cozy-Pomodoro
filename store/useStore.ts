@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { User, Task, TimerSettings, TimerMode, Note, Plan } from '../types';
+import { User, Task, TimerSettings, TimerMode, Note, Plan, Language } from '../types';
 import * as api from '../services/fakeBackend';
 import { playSFX } from '../utils/audio';
 
@@ -14,6 +14,10 @@ export const PRESET_BACKGROUNDS = [
 ];
 
 interface AppState {
+  // App
+  language: Language;
+  setLanguage: (lang: Language) => void;
+
   // Auth
   user: User | null;
   isAuthenticated: boolean;
@@ -163,6 +167,12 @@ const getStoredBackground = (): string => {
   } catch { return PRESET_BACKGROUNDS[0]; }
 };
 
+const getStoredLanguage = (): Language => {
+  try {
+    return (localStorage.getItem('app_language') as Language) || 'en';
+  } catch { return 'en'; }
+};
+
 const getStoredStreak = () => {
   try {
     const streak = parseInt(localStorage.getItem('streak_count') || '0');
@@ -189,6 +199,13 @@ const getStoredStreak = () => {
 const streakData = getStoredStreak();
 
 export const useStore = create<AppState>((set, get) => ({
+  // App
+  language: getStoredLanguage(),
+  setLanguage: (lang) => {
+    localStorage.setItem('app_language', lang);
+    set({ language: lang });
+  },
+
   // Auth
   user: null,
   isAuthenticated: false,
