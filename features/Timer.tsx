@@ -181,14 +181,14 @@ export const Timer: React.FC = () => {
          </div>
       </motion.div>
 
-      {/* Active Task Pill */}
+      {/* Active Task Pill - In Flow */}
       <AnimatePresence>
         {activeTask && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            className="absolute -bottom-12 md:-bottom-16 z-20 w-full flex justify-center px-4"
+            initial={{ opacity: 0, y: 10, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: 'auto' }}
+            exit={{ opacity: 0, y: 10, height: 0 }}
+            className="w-full flex justify-center px-4 overflow-visible z-20 pb-4"
           >
              <div className="bg-stone-900/80 px-4 py-2.5 md:px-6 md:py-3 rounded-xl border border-white/10 backdrop-blur-xl flex items-center gap-3 md:gap-4 shadow-lg cursor-default max-w-sm md:max-w-md w-full">
                 <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-cozy-amber shrink-0" />

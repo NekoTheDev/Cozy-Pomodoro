@@ -116,8 +116,10 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Timer */}
-        <div className="flex-1 flex items-center justify-center overflow-y-auto no-scrollbar min-h-0">
-           <Timer />
+        <div className="flex-1 flex flex-col overflow-y-auto no-scrollbar min-h-0 relative">
+           <div className="m-auto w-full">
+             <Timer />
+           </div>
         </div>
 
         {/* Bottom Dock */}
